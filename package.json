@@ -1,0 +1,17 @@
+{
+  "name": "feel.in",
+  "version": "0.0.1",
+  "description": "An application for everyone tell what feeling and talk with someone about it.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Vitor Roque",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "express": "^4.16.3",
+    "nedb": "^1.8.0",
+    "shortid": "^2.2.13"
+  }
+}
