@@ -10,6 +10,5 @@ module.exports = app => {
             require(`./routes/${file}`)(app);
         });
      });
-    
 }
 

@@ -1,9 +1,15 @@
 const NeDB = require('nedb');
 const fs = require('fs');
 
-const Database = new NeDB({
-    filename: './feelin.db',
+const Persons = new NeDB({
+    filename: './database/feel.persons.db',
     autoload: true
 });
 
-module.exports = Database;
+const Quotes = new NeDB({
+    filename: './database/feel.quotes.db',
+    autoload: true
+});
+
+module.exports = Persons;
+module.exports = Quotes;

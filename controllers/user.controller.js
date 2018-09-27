@@ -1,4 +1,6 @@
-const Person = new require('../models/Person');
+const Person = require('../models/Person');
+
+
 module.exports.create = function(request, response) {
 
     try {
@@ -11,7 +13,7 @@ module.exports.create = function(request, response) {
             name: name
         });
 
-    }catch(err) {
+    } catch(err) {
         response.status(400).send({
             msg_err: err.message
         });
@@ -23,11 +25,18 @@ module.exports.fetch = function(request, response) {
 
     try {
         const { name } = request.body;
-        const person = Person.fetch(name);
-        console.log(person);
-        response.send({
-            name: person
+        Person.fetch(name, (err, docs) => {
+
+            if(err) {
+                response.status(400).send({
+                    msg_err: err
+                });
+            }
+            response.send({
+                name: docs.name
+            });
         });
+        
     }catch(err) {
         response.status(400).send({
             msg_err: err.message
