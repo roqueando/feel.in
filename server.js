@@ -6,7 +6,7 @@ const bp = require('body-parser');
  * Requires
  */
 require('./router')(app);
-
+require('./model');
 /**
  * Configs
  */

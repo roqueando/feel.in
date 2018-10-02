@@ -1,15 +1,14 @@
 const Quotes = require('../models/Quotes');
-const emoji = require('node-emoji');
-module.exports.publish = function(request, response) {
+const Replies = require('../models/Replies');
+module.exports.publish = async function(request, response) {
 
     try {
-        
-        const { your_feel, what_u_need } = request.body;
 
-        Quotes.publish(your_feel, what_u_need);
+        const { quote, what_u_need } = request.body;
+
+        const qt = await Quotes.publish(quote, what_u_need);
         response.send({
-            your_feel: your_feel,
-            what_u_need: what_u_need
+            quote: qt
         });
 
     } catch (err) {
@@ -20,25 +19,55 @@ module.exports.publish = function(request, response) {
 
 }
 
-module.exports.getQuotes = function(request, response) {
+module.exports.getQuotes = async function(request, response) {
 
     try {
-        
-        Quotes.getQuotes(function(err, quotes) {
-            if (err) {
-                response.status(400).send({
-                    msg_err: err
-                });
-            }
-            
-            response.send({
-                quote: quotes
-            });
-        });
+		const quotes = await Quotes.getQuotes();
+		response.send({
+			quotes: quotes
+		});
 
     } catch (err) {
         response.status(400).send({
             msg_err: err.message
         });
     }
+}
+
+module.exports.reply = async function (request, response) {
+
+	try {
+
+		const { quote, comment, image, emoji } = request.body;
+
+		const reply = await Replies.reply(quote, comment, image, emoji);
+
+		response.send({
+			reply: reply
+		});
+
+	} catch (err) {
+		response.status(400).send({
+			msg_err: err.message
+		});
+	}
+
+}
+
+module.exports.getRepliesByQuote = async function (request, response) {
+
+	try {
+		const { quotes } = request.body;
+		const replies = await Replies.getRepliesByQuote(quotes);
+
+		response.send({
+			replies: replies
+		});
+
+	} catch (err) {
+		response.status(400).send({
+			msg_err: err.message
+		});
+	}
+
 }

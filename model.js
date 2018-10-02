@@ -1,15 +1,9 @@
-const NeDB = require('nedb');
-const fs = require('fs');
+const mongoose = require('mongoose');
 
-const Persons = new NeDB({
-    filename: './database/feel.persons.db',
-    autoload: true
-});
+/**
+ * [Creates the connection with the DB]
+ *
+ */
+mongoose.connect(`mongodb://localhost:27017/feelin`);
 
-const Quotes = new NeDB({
-    filename: './database/feel.quotes.db',
-    autoload: true
-});
-
-module.exports = Persons;
-module.exports = Quotes;
+mongoose.Promise = global.Promise;

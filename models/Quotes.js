@@ -1,25 +1,56 @@
-const Quotes = require('../model');
+const mongoose = require('mongoose');
+
+const QuotesSchema = new mongoose.Schema({
+
+	who: {
+		type: mongoose.Schema.Types.ObjectId,
+		ref: 'Persons',
+		required: false
+	},
+	quote: {
+		type: String,
+		required: true
+	},
+
+	what_u_need: {
+		type: String,
+		required: true
+	},
+
+	answers: [
+		{
+			type: mongoose.Schema.Types.ObjectId,
+			ref: 'Replies'
+		}
+	]
+
+});
+
+const Quotes = mongoose.model('Quotes', QuotesSchema);
+
 
 const Quote = function () {
 
     return {
 
-        publish: function(your_feel, need) {
-            Quotes.insert({
+        publish: async function(your_feel, need) {
+            return await Quotes.create({
                 quote: your_feel,
-                what_u_need: {
-                    emoji: need.emoji,
-                    need: need.text  
-                },
-                answers: []
+                what_u_need: need,
             });
+
         },
 
-        getQuotes: function(cb) {
-            Quotes.find({quotes: 'quotes'}, function(err, docs) {
-                cb(err, docs);
-            });
-        }
+        getQuotes: async function() {
+            return await Quotes.find({})
+					.populate('Replies')
+					.exec();
+
+        },
+
+		getQuotesByWho: async function(who) {
+			return await Quotes.findOne({'who': who});
+		}
 
     }
 
