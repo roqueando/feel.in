@@ -5,12 +5,10 @@ module.exports.create = async function(request, response) {
 
     try {
 
-        const { name } = request.body;
-
-        const username = await Person.create(name);
+    
+        const username = await Person.create(request.body);
 
 		response.send({
-            msg: 'success',
             name: username
         });
 

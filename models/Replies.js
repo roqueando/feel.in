@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-
+const Quote = require('./Quotes');
 
 const RepliesSchema = new mongoose.Schema({
 	quotes: {
@@ -17,11 +17,14 @@ const RepliesSchema = new mongoose.Schema({
 	emoji: {
 		type: String,
 		required: true
+	},
+	createdAt: {
+		type: Date,
+		default: Date.now
 	}
 });
 
 const Replies = mongoose.model('Replies', RepliesSchema);
-
 const Reply = function () {
 
     return {
@@ -29,21 +32,13 @@ const Reply = function () {
 		/**
 			Reply gets three parameters to insert a comment into a Quote.
 		*/
-        reply: async function(id = "", comment = "", image = "", emoji = "") {
-            return await Replies.create({
-				quote: id,
-                comment: comment,
-				image: image,
-                emoji: emoji,
-            });
+        reply: async function(request) {
+            return await Replies.create(request);
+
         },
 
         getRepliesByQuote: async function(quotes) {
-             await Replies.find({'quotes': quotes}).populate({
-				path: 'quotes'
-			}).exec(function (err, doc) {
-				console.log(doc);
-			});
+             return await Replies.find({'quotes': quotes}).populate('quotes', '_id').exec();
         }
 
     }

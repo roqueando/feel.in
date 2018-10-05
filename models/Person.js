@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require('../model');
 const Schema = mongoose.Schema;
 // Person Schema
 const PersonsSchema = new Schema({
@@ -6,6 +6,18 @@ const PersonsSchema = new Schema({
 	name: {
 		type: String,
 		required: true
+	},
+	photo: {
+		type: String,
+		required: false
+	},
+	question: {
+		type: String,
+		required: false
+	},
+	answer: {
+		type: String,
+		required: false
 	}
 
 });
@@ -17,11 +29,9 @@ const Persons = mongoose.model('Persons', PersonsSchema);
 const Person = function() {
 
     return {
-        create: async function(name) {
+        create: async function(request) {
 
-            return await Persons.create({
-                name: name
-            });
+            return await Persons.create(request);
 
         },
         fetch: async function() {

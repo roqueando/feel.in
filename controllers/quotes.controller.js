@@ -1,12 +1,12 @@
-const Quotes = require('../models/Quotes');
+const Quote = require('../models/Quotes');
 const Replies = require('../models/Replies');
-module.exports.publish = async function(request, response) {
+
+
+module.exports.publish = async (request, response) => {
 
     try {
 
-        const { quote, what_u_need } = request.body;
-
-        const qt = await Quotes.publish(quote, what_u_need);
+        const qt = await Quote.publish(request.body);
         response.send({
             quote: qt
         });
@@ -19,10 +19,10 @@ module.exports.publish = async function(request, response) {
 
 }
 
-module.exports.getQuotes = async function(request, response) {
+module.exports.getQuotes = async (request, response) => {
 
     try {
-		const quotes = await Quotes.getQuotes();
+		const quotes = await Quote.getQuotes();
 		response.send({
 			quotes: quotes
 		});
@@ -36,38 +36,42 @@ module.exports.getQuotes = async function(request, response) {
 
 module.exports.reply = async function (request, response) {
 
-	try {
+    try {
 
-		const { quote, comment, image, emoji } = request.body;
 
-		const reply = await Replies.reply(quote, comment, image, emoji);
+       await Replies.reply(request.body).then(reply => {
+             Quote.addReply(reply._id, reply.quotes);
 
-		response.send({
-			reply: reply
-		});
+            response.send({
+                reply: reply
+            });
+       });
 
-	} catch (err) {
-		response.status(400).send({
-			msg_err: err.message
-		});
-	}
+        
+
+    } catch (err) {
+        response.status(400).send({
+            msg_err: err.message
+        });
+    }
 
 }
 
 module.exports.getRepliesByQuote = async function (request, response) {
 
-	try {
-		const { quotes } = request.body;
-		const replies = await Replies.getRepliesByQuote(quotes);
+    try {
 
-		response.send({
-			replies: replies
-		});
+        const replies = await Replies.getRepliesByQuote(request.body.quote);
 
-	} catch (err) {
-		response.status(400).send({
-			msg_err: err.message
-		});
-	}
+        response.send({
+            replies: replies
+        });
+
+    } catch (err) {
+        response.status(400).send({
+            msg_err: err.message
+        });
+    }
 
 }
+

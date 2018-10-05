@@ -1,12 +1,13 @@
-const mongoose = require('mongoose');
+const mongoose = require('../model');
 
 const QuotesSchema = new mongoose.Schema({
 
-	who: {
+	user: {
 		type: mongoose.Schema.Types.ObjectId,
-		ref: 'Persons',
-		required: false
+		ref: 'Persons'
+		
 	},
+	
 	quote: {
 		type: String,
 		required: true
@@ -16,13 +17,18 @@ const QuotesSchema = new mongoose.Schema({
 		type: String,
 		required: true
 	},
+	replies: [{
 
-	answers: [
-		{
 			type: mongoose.Schema.Types.ObjectId,
 			ref: 'Replies'
-		}
-	]
+
+	}],
+	createdAt: {
+		type: Date,
+		default: Date.now()
+	}
+
+
 
 });
 
@@ -33,19 +39,21 @@ const Quote = function () {
 
     return {
 
-        publish: async function(your_feel, need) {
-            return await Quotes.create({
-                quote: your_feel,
-                what_u_need: need,
-            });
+        publish: async function(request) {
+            return await Quotes.create(request);
+
+        },
+
+        addReply: async function(id, quoteId) {
+
+        	const qt = await Quotes.findOne({_id: quoteId});
+        	qt.replies.push(id);
+        	qt.save();
 
         },
 
         getQuotes: async function() {
-            return await Quotes.find({})
-					.populate('Replies')
-					.exec();
-
+            return await Quotes.find().populate('persons', 'name').populate('replies');
         },
 
 		getQuotesByWho: async function(who) {
@@ -55,6 +63,5 @@ const Quote = function () {
     }
 
 }
-
 
 module.exports = new Quote;
