@@ -1,10 +1,17 @@
 const mongoose = require('mongoose');
 const Quote = require('./Quotes');
+const Persons = require('./Person');
+const emoji = require('node-emoji');
+
 
 const RepliesSchema = new mongoose.Schema({
 	quotes: {
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'Quotes'
+	},
+	persons: {
+		type: mongoose.Schema.Types.ObjectId,
+		ref: 'Persons'
 	},
 	comment: {
 		type: String,
@@ -38,7 +45,14 @@ const Reply = function () {
         },
 
         getRepliesByQuote: async function(quotes) {
-             return await Replies.find({'quotes': quotes}).populate('quotes', '_id').exec();
+             const replies = await Replies.find({'quotes': quotes}).populate('persons', 'name').exec();
+
+            for(var i in replies) {
+		        replies[i].emoji = emoji.get(replies[i].emoji);
+		        
+		    }
+
+		    return replies;
         }
 
     }

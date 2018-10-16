@@ -5,12 +5,23 @@ module.exports.create = async function(request, response) {
 
     try {
 
-    
-        const username = await Person.create(request.body);
+        if(!await Person.checkIpExists(request.body.ip)) {
 
-		response.send({
-            name: username
-        });
+            const username = await Person.create(request.body);
+            response.send({
+                name: username
+            });
+
+        }else {
+            
+            const user_by_ip = await Person.fetchByIp(request.body.ip);
+
+            response.send({
+                name: user_by_ip
+            });
+        }
+
+		
 
     } catch(err) {
         response.status(400).send({

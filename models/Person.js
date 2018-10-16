@@ -11,14 +11,13 @@ const PersonsSchema = new Schema({
 		type: String,
 		required: false
 	},
-	question: {
+
+	ip: {
 		type: String,
-		required: false
-	},
-	answer: {
-		type: String,
-		required: false
+		required: true,
+		unique: true
 	}
+	
 
 });
 
@@ -29,6 +28,15 @@ const Persons = mongoose.model('Persons', PersonsSchema);
 const Person = function() {
 
     return {
+    	checkIpExists: async function(ip) {
+
+    		const address = await Persons.findOne({ip: ip});
+    		if(address) {
+    			return true;
+    		}else {
+    			return false;
+    		}
+    	},
         create: async function(request) {
 
             return await Persons.create(request);
@@ -38,6 +46,11 @@ const Person = function() {
 
             return await Persons.find({});
 
+        },
+
+        fetchByIp: async function(ip) {
+
+        	return await Persons.findOne({'ip': ip});
         },
 
 		fetchByName: async function (name) {

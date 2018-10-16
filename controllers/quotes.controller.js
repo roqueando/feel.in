@@ -1,7 +1,6 @@
 const Quote = require('../models/Quotes');
 const Replies = require('../models/Replies');
 
-
 module.exports.publish = async (request, response) => {
 
     try {
@@ -23,6 +22,7 @@ module.exports.getQuotes = async (request, response) => {
 
     try {
 		const quotes = await Quote.getQuotes();
+        
 		response.send({
 			quotes: quotes
 		});
@@ -60,13 +60,14 @@ module.exports.reply = async function (request, response) {
 module.exports.getRepliesByQuote = async function (request, response) {
 
     try {
-
-        const replies = await Replies.getRepliesByQuote(request.body.quote);
-
+        
+       
+        const replies = await Replies.getRepliesByQuote(request.body.quotes);
+        
         response.send({
             replies: replies
         });
-
+        
     } catch (err) {
         response.status(400).send({
             msg_err: err.message
