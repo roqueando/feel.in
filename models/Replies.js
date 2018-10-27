@@ -7,11 +7,13 @@ const emoji = require('node-emoji');
 const RepliesSchema = new mongoose.Schema({
 	quotes: {
 		type: mongoose.Schema.Types.ObjectId,
-		ref: 'Quotes'
+		ref: 'Quotes',
+		required: true,
 	},
-	persons: {
+	user: {
 		type: mongoose.Schema.Types.ObjectId,
-		ref: 'Persons'
+		ref: 'Persons',
+		required: true,
 	},
 	comment: {
 		type: String,
@@ -45,7 +47,7 @@ const Reply = function () {
         },
 
         getRepliesByQuote: async function(quotes) {
-             const replies = await Replies.find({'quotes': quotes}).populate('persons', 'name').exec();
+             const replies = await Replies.find({'quotes': quotes}).populate('user', 'name').exec();
 
             for(var i in replies) {
 		        replies[i].emoji = emoji.get(replies[i].emoji);

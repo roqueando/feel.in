@@ -55,7 +55,7 @@ const Quote = function () {
         },
 
         getQuotes: async function() {
-            const quotes = await Quotes.find().populate('persons', 'name').populate('replies');
+            const quotes = await Quotes.find().populate('user', 'name').populate('replies');
 
             for(var i in quotes) {
 		        quotes[i].what_u_need = emoji.get(quotes[i].what_u_need);
