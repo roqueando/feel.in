@@ -12,6 +12,11 @@ const PersonsSchema = new Schema({
 		required: false
 	},
 
+    background: {
+        type: String,
+        required: false
+    },
+
 	ip: {
 		type: String,
 		required: true,

@@ -46,3 +46,19 @@ module.exports.fetch = async function(request, response) {
     }
 
 }
+
+module.exports.profile = async function(request, response) {
+
+    try {
+
+        const user_name = await Person.fetchByIp(request.body.ip);
+        response.send({
+            user: user_name
+        });
+    }catch(err) {
+        response.status(400).send({
+            msg_err: err.message
+        });
+    }
+
+}

@@ -66,8 +66,32 @@ const Quote = function () {
 		    for(var r in quotes[i].replies) {
 		        if(quotes[i].replies[r].emoji != undefined){
 		            quotes[i].replies[r].emoji = emoji.get(quotes[i].replies[r].emoji);
+		            
 		        }
 		    }
+
+		    return quotes;
+        },
+
+        getQuotesByWho: async function(who, lim) {
+        	const quotes = await Quotes.find({'user': who})
+        					.sort('-replies')
+        					.limit(lim);
+        	for(var i in quotes) {
+
+		        quotes[i].what_u_need = emoji.get(quotes[i].what_u_need);
+
+
+		    }
+
+		    /*
+		    for(var r in quotes[i].replies) {
+		        if(quotes[i].replies[r].emoji != undefined){
+		            quotes[i].replies[r].emoji = emoji.get(quotes[i].replies[r].emoji);
+		            
+		        }
+		    }
+		    */
 
 		    return quotes;
         },

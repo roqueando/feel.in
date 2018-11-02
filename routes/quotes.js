@@ -8,6 +8,7 @@ module.exports = app => {
 
 	// =================== GET ========================= //
     app.get(`/quotes`, quotesController.getQuotes);
+    app.get(`/quotes/:who`, quotesController.getQuotesByWho);
 
 
 }

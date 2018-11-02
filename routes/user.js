@@ -3,6 +3,6 @@ module.exports = app => {
 
     app.post(`/create`, userController.create);
     app.get(`/fetch`, userController.fetch);
-
+    app.post(`/profile`, userController.profile);
 }
 

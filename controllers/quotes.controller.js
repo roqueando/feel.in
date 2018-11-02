@@ -34,6 +34,21 @@ module.exports.getQuotes = async (request, response) => {
     }
 }
 
+module.exports.getQuotesByWho = async (request, response) => {
+
+    try {
+        const quotes = await Quote.getQuotesByWho(request.params.who, 5);
+        
+        response.send({
+            quotes: quotes
+        });
+
+    } catch (err) {
+        response.status(400).send({
+            msg_err: err.message
+        });
+    }
+}
 module.exports.reply = async function (request, response) {
 
     try {
