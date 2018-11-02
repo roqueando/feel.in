@@ -48,9 +48,10 @@ const Quote = function () {
 
         addReply: async function(id, quoteId) {
 
-        	const qt = await Quotes.findOne({_id: quoteId});
+        	const qt = await Quotes.findOne({_id: quoteId}).populate('user', 'name');
         	qt.replies.push(id);
         	qt.save();
+        	return qt;
 
         },
 
@@ -85,14 +86,6 @@ const Quote = function () {
 
 		    }
 
-		    /*
-		    for(var r in quotes[i].replies) {
-		        if(quotes[i].replies[r].emoji != undefined){
-		            quotes[i].replies[r].emoji = emoji.get(quotes[i].replies[r].emoji);
-		            
-		        }
-		    }
-		    */
 
 		    return quotes;
         },

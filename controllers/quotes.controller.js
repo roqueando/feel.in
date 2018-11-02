@@ -1,5 +1,7 @@
 const Quote = require('../models/Quotes');
 const Replies = require('../models/Replies');
+const Notification = require('../models/Notifications');
+const emoji = require('node-emoji');
 
 module.exports.publish = async (request, response) => {
 
@@ -55,7 +57,19 @@ module.exports.reply = async function (request, response) {
 
 
        await Replies.reply(request.body).then(reply => {
-             Quote.addReply(reply._id, reply.quotes);
+            var addedReply = Quote.addReply(reply._id, reply.quotes);
+            var addedPromiseResolved = Promise.resolve(addedReply);
+
+            addedPromiseResolved.then(function(response) {
+                const replyUserName = Replies.getReplyById(reply._id);
+                var repUser = Promise.resolve(replyUserName);
+                repUser.then((rep) => {
+                    
+                    Notification.addNotification(rep.user.name, response.user.name, reply.comment, emoji.get(reply.emoji));
+
+                });
+                
+            });
 
             response.send({
                 reply: reply

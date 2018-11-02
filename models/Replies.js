@@ -42,8 +42,13 @@ const Reply = function () {
 			Reply gets three parameters to insert a comment into a Quote.
 		*/
         reply: async function(request) {
-            return await Replies.create(request);
+            const reply = await Replies.create(request);
+            return reply;
+        },
 
+        getReplyById: async function(id) {
+        	const reply = await Replies.findOne({"_id": id}).populate('user', 'name');
+        	return reply;
         },
 
         getRepliesByQuote: async function(quotes) {
