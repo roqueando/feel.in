@@ -75,6 +75,7 @@ const Quote = function () {
 
         getQuotesByWho: async function(who, lim) {
         	const quotes = await Quotes.find({'user': who})
+        					.populate('user', 'name')
         					.sort('-replies')
         					.limit(lim);
         	for(var i in quotes) {
